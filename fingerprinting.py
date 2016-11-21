@@ -47,11 +47,11 @@ if __name__ == "__main__":
         for probe in probes:
             for strategy in axl.strategies:
                 af = axl.AshlockFingerprint(strategy, probe)
-                data = af.fingerprint(turns=turns, repetitions=rep, step=0.01)
+                data = af.fingerprint(turns=turns, repetitions=rep, step=0.01, processes=0)
                 for cmap in col_maps:
                     for intpl in interpolations:
                         for ftype in file_types:
-                            p = af.plot(col_map=cmap, interpolation=intpl, processes=0)
+                            p = af.plot(col_map=cmap, interpolation=intpl)
                             directory = '/scratch/c1304586/fingerprints/images/'
                             directory += '{}/{}/{}/'.format(turns, rep, probe.__name__)
                             write_to_file(data, directory)
