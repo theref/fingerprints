@@ -1,4 +1,4 @@
-turns = [10, 50, 100, 250, 500]
+turns = [5, 10, 25, 50, 100, 250, 500, 750, 1000]
 command = """#!/bin/bash
 #PBS -q workq
 #PBS -N Turns-{}
