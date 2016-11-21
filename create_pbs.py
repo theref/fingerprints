@@ -9,6 +9,8 @@ command = """#!/bin/bash
 #PBS -l walltime=60:00:00
 #PBS -P PR350
 
+export MPLBACKEND="agg"
+
 /home/c1304586/anaconda3/bin/python /home/c1304586/fingerprints/fingerprinting.py {}
 """
 
