@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -q workq
-#PBS -N Turns-10
+#PBS -N Turns-750
 #PBS -o out.txt
 #PBS -e err.txt
 #PBS -l select=1:ncpus=16:mpiprocs=16
@@ -8,4 +8,4 @@
 #PBS -l walltime=60:00:00
 #PBS -P PR350
 
-python /home/c1304586/fingerprints/fingerprinting.py 10
+python /home/c1304586/fingerprints/fingerprinting.py 750
