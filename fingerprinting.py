@@ -49,13 +49,14 @@ if __name__ == "__main__":
             for strategy in axl.strategies:
                 af = axl.AshlockFingerprint(strategy, probe)
                 data = af.fingerprint(turns=turns, repetitions=rep, step=0.01, processes=0)
+                directory = '/scratch/c1304586/fingerprints/images/'
+                write_to_file(data, directory)
                 for cmap in col_maps:
                     for intpl in interpolations:
                         for ftype in file_types:
                             p = af.plot(col_map=cmap, interpolation=intpl)
                             directory = '/scratch/c1304586/fingerprints/images/'
                             directory += '{}/{}/{}/'.format(turns, rep, probe.__name__)
-                            write_to_file(data, directory)
                             directory += '{}/{}/'.format(cmap, intpl)
                             if not os.path.exists(directory):
                                 os.makedirs(directory)
