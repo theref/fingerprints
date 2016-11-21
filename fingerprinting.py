@@ -1,5 +1,6 @@
 import sys
 import os
+import csv
 import axelrod as axl
 
 user = os.getlogin()
@@ -10,6 +11,16 @@ probes = [axl.TitForTat, axl.TitFor2Tats, axl.TwoTitsForTat, axl.Bully,
 col_maps = ['seismic', 'PuOr']
 file_types = ['png', 'pdf']
 interpolations = ['none', 'None', 'bicubic', 'bessel']
+
+
+def write_to_file(data, directory):
+    filename = directory + 'results.csv'
+    with open(filename, 'w') as textfile:
+        w = csv.writer(textfile)
+        for key, value in data.items():
+            row = (key[0], key[1], value)
+            w.writerow(row)
+
 
 if __name__ == "__main__":
     if user == 'James':
@@ -24,12 +35,12 @@ if __name__ == "__main__":
                                 p = af.plot(col_map=cmap, interpolation=intpl)
                                 directory = '/Users/James/Projects/fingerprints/images/'
                                 directory += '{}/{}/{}/'.format(turns, rep, probe.__name__)
+                                write_to_file(data, directory)
                                 directory += '{}/{}/'.format(cmap, intpl)
                                 if not os.path.exists(directory):
                                     os.makedirs(directory)
                                 directory += '{}.{}'.format(strategy.__name__, ftype)
                                 p.savefig(directory)
-                                print(directory)
 
     if user == 'c1304586':
         for rep in repetitions:
@@ -41,11 +52,11 @@ if __name__ == "__main__":
                         for intpl in interpolations:
                             for ftype in file_types:
                                 p = af.plot(col_map=cmap, interpolation=intpl, processes=0)
-                                directory = '/home/c1304586/fingerprints/images/'
+                                directory = '/scratch/c1304586/fingerprints/images/'
                                 directory += '{}/{}/{}/'.format(turns, rep, probe.__name__)
+                                write_to_file(data, directory)
                                 directory += '{}/{}/'.format(cmap, intpl)
                                 if not os.path.exists(directory):
                                     os.makedirs(directory)
                                 directory += '{}.{}'.format(strategy.__name__, ftype)
                                 p.savefig(directory)
-                                print(directory)
