@@ -35,6 +35,17 @@ if __name__ == "__main__":
         for rep in repetitions:
             for probe in probes:
                 for strategy in axl.strategies:
-                    path = '/scratch/c1304586/images/{}/{}/{}/'.format(turns, rep, probe)
                     af = axl.AshlockFingerprint(strategy, probe)
                     data = af.fingerprint(turns=turns, repetitions=rep, step=0.01)
+                    for cmap in col_maps:
+                        for intpl in interpolations:
+                            for ftype in file_types:
+                                p = af.plot(col_map=cmap, interpolation=intpl, processes=0)
+                                directory = '/home/c1304586/fingerprints/images/'
+                                directory += '{}/{}/{}/'.format(turns, rep, probe.__name__)
+                                directory += '{}/{}/'.format(cmap, intpl)
+                                if not os.path.exists(directory):
+                                    os.makedirs(directory)
+                                directory += '{}.{}'.format(strategy.__name__, ftype)
+                                p.savefig(directory)
+                                print(directory)
