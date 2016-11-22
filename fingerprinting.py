@@ -15,7 +15,8 @@ interpolations = ['none', 'None', 'bicubic', 'bessel']
 
 def write_to_file(data, directory):
     filename = directory + 'results.csv'
-    os.makedirs(directory)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     with open(filename, 'w') as textfile:
         w = csv.writer(textfile)
         for key, value in data.items():
