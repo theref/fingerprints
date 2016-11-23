@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -q workq
-#PBS -N Turns-50
+#PBS -N T50-R100
 #PBS -o out.txt
 #PBS -e err.txt
 #PBS -l select=1:ncpus=16:mpiprocs=16
@@ -10,4 +10,4 @@
 
 export MPLBACKEND="agg"
 
-/home/c1304586/anaconda3/bin/python /home/c1304586/fingerprints/fingerprinting.py 50
+/home/c1304586/anaconda3/bin/python /home/c1304586/fingerprints/fingerprinting.py 50 100
