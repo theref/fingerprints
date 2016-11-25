@@ -1,0 +1,29 @@
+name: fingerprint
+channels: !!python/tuple
+- defaults
+dependencies:
+- openssl=1.0.2j=0
+- pip=9.0.1=py35_0
+- python=3.5.2=0
+- readline=6.2=2
+- setuptools=27.2.0=py35_0
+- sqlite=3.13.0=0
+- tk=8.5.18=0
+- wheel=0.29.0=py35_0
+- xz=5.2.2=0
+- zlib=1.2.8=3
+- pip:
+  - axelrod==1.18.1
+  - cycler==0.10.0
+  - hypothesis==3.6.0
+  - matplotlib==1.5.3
+  - numpy==1.11.2
+  - prompt-toolkit==1.0.9
+  - pyparsing==2.1.1
+  - python-dateutil==2.6.0
+  - pytz==2016.7
+  - six==1.10.0
+  - tqdm==3.4.0
+  - wcwidth==0.1.7
+prefix: /home/c1304586/anaconda3/envs/fingerprint
+
