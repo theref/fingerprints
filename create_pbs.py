@@ -12,7 +12,7 @@ command = """#!/bin/bash
 
 export MPLBACKEND="agg"
 
-/home/c1304586/anaconda3/bin/python /home/c1304586/fingerprints/fingerprinting.py {} {}
+/home/c1304586/anaconda3/envs/fingerprint/bin/python /home/c1304586/fingerprints/fingerprinting.py {} {}
 """
 
 if __name__ == "__main__":
