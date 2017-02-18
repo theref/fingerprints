@@ -122,7 +122,8 @@ def create_test_df(strategies):
 
 def clean_test_df(training_df):
     training_df = training_df[training_df.Name != 'Dual Joss-Ann Tit For Tat']
-    training_df = training_df[training_df.Name != 'Joss-Ann Tit For Tat']    training_df.drop('Rank', axis=1, inplace=True)
+    training_df = training_df[training_df.Name != 'Joss-Ann Tit For Tat']
+    training_df.drop('Rank', axis=1, inplace=True)
     training_df['Median_score'] = training_df['Median_score'] / 5
     return training_df
 
