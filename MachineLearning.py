@@ -158,6 +158,21 @@ def create_large_df(small_df):
     overall_df['DD_rate_r'] = (overall_df[['DD_rate_A', 'DD_rate_B']].min(axis=1) /
                                overall_df[['DD_rate_A', 'DD_rate_B']].max(axis=1))
 
+
+    overall_df['CC_to_C_r'] = (overall_df[['CC_to_C_rate_A', 'CC_to_C_rate_B']].min(axis=1) /
+                               overall_df[['CC_to_C_rate_A', 'CC_to_C_rate_B']].max(axis=1))
+
+    overall_df['CD_to_C_r'] = (overall_df[['CD_to_C_rate_A', 'CD_to_C_rate_B']].min(axis=1) /
+                               overall_df[['CD_to_C_rate_A', 'CD_to_C_rate_B']].max(axis=1))
+
+    overall_df['DC_to_C_r'] = (overall_df[['DC_to_C_rate_A', 'DC_to_C_rate_B']].min(axis=1) /
+                               overall_df[['DC_to_C_rate_A', 'DC_to_C_rate_B']].max(axis=1))
+
+    overall_df['DD_to_C_r'] = (overall_df[['DD_to_C_rate_A', 'DD_to_C_rate_B']].min(axis=1) /
+                               overall_df[['DD_to_C_rate_A', 'DD_to_C_rate_B']].max(axis=1))
+
+
+
     overall_df['Cooperation_rating_r'] = (overall_df[['Cooperation_rating_A',
                                                       'Cooperation_rating_B']].min(axis=1) /
                                           overall_df[['Cooperation_rating_A',
@@ -174,8 +189,11 @@ def create_large_df(small_df):
     overall_df['Wins_r'] = (overall_df[['Wins_A', 'Wins_B']].min(axis=1) /
                             overall_df[['Wins_A', 'Wins_B']].max(axis=1))
 
-    overall_df.drop(['CC_rate_A', 'CC_rate_B', 'CD_rate_A',
+    overall_df.drop(['Name_A', 'Name_B', 'CC_rate_A', 'CC_rate_B', 'CD_rate_A',
                      'CD_rate_B', 'DC_rate_A', 'DC_rate_B', 'DD_rate_A',
+                     'CC_to_C_rate_A', 'CC_to_C_rate_B', 'CD_to_C_rate_A',
+                     'CD_to_C_rate_B', 'DC_to_C_rate_A', 'DC_to_C_rate_B',
+                     'DD_to_C_rate_A', 'DD_to_C_rate_B',
                      'DD_rate_B', 'Cooperation_rating_A', 'Cooperation_rating_B',
                      'Initial_C_rate_A', 'Initial_C_rate_B', 'Median_score_A',
                      'Median_score_B', 'Wins_A', 'Wins_B'], axis=1, inplace=True)
