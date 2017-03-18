@@ -135,7 +135,7 @@ def create_ashlock_tournament_df(ashlock_tournament, processes):
     return results_df
 
 
-def combine_dfs(df_1, df_2):
+def combine_dfs(df_1, df_2, epsilon=None):
     column_names = df_1.columns
     A_columns = [i + '_A' for i in column_names]
     B_columns = [i + '_B' for i in column_names]
@@ -164,6 +164,9 @@ def combine_dfs(df_1, df_2):
                          'Cooperation_rating_B', 'Initial_C_rate_A',
                          'Initial_C_rate_B', 'Median_score_A', 'Median_score_B',
                          'Wins_A', 'Wins_B'], axis=1, inplace=True)
+
+    if epsilon is not None:
+        combination_df['Epsilon'] = epsilon
 
     combination_df.fillna(1, inplace=True)
 
