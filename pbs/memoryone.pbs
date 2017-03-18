@@ -8,4 +8,6 @@
 #PBS -l walltime=1:00:00
 #PBS -P PR350
 
+export MPLBACKEND="agg"
+
 /home/c1304586/anaconda3/envs/fingerprint/bin/python /home/c1304586/fingerprints/raven_memory_one.py
