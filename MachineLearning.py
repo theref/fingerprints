@@ -116,12 +116,12 @@ def build_ashlock_tournament(strategies):
     return spatial_tournament
 
 
-def create_ashlock_tournament_df(ashlock_tournament, processes):
+def create_ashlock_tournament_df(ashlock_tournament, p=None, p_bar=False):
     """For an ashlock tournament, build the results dataframe.
     This includes, removing all Dual/Joss-Ann lines, and
     standardising median score.
     """
-    results = ashlock_tournament.play(processes=processes)
+    results = ashlock_tournament.play(processes=p, progress_bar=p_bar)
 
     with tempfile.NamedTemporaryFile() as temp:
         results.write_summary(temp.name)
