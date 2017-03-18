@@ -105,99 +105,66 @@ def create_edges(strategies, points):
     return edges
 
 
-def create_test_df(strategies):
+def build_ashlock_tournament(strategies):
+    """For a list of strategies, build the ashlock tournament but do not play.
+    """
     points = create_points(step=0.25)
     probes = create_probes(axl.TitForTat, points)
     edges = create_edges(strategies, points)
     tournament_players = strategies + probes
     spatial_tournament = axl.SpatialTournament(tournament_players, edges=edges)
-    results = spatial_tournament.play()
+    return spatial_tournament
+
+
+def create_ashlock_tournament_df(ashlock_tournament, processes):
+    """For an ashlock tournament, build the results dataframe.
+    This includes, removing all Dual/Joss-Ann lines, and
+    standardising median score.
+    """
+    results = ashlock_tournament.play(processes=processes)
 
     with tempfile.NamedTemporaryFile() as temp:
         results.write_summary(temp.name)
-        training_df = pd.read_csv(temp.name)
+        results_df = pd.read_csv(temp.name)
 
-    return training_df
+    results_df = results_df[results_df.Name != 'Dual Joss-Ann Tit For Tat']
+    results_df = results_df[results_df.Name != 'Joss-Ann Tit For Tat']
+    results_df.drop('Rank', axis=1, inplace=True)
+    results_df['Median_score'] = results_df['Median_score'] / 5
 
-
-def clean_test_df(training_df):
-    training_df = training_df[training_df.Name != 'Dual Joss-Ann Tit For Tat']
-    training_df = training_df[training_df.Name != 'Joss-Ann Tit For Tat']
-    training_df.drop('Rank', axis=1, inplace=True)
-    training_df['Median_score'] = training_df['Median_score'] / 5
-    return training_df
+    return results_df
 
 
-def create_large_df(small_df):
-    orig_columns = small_df.columns
-    A_columns = [i + '_A' for i in orig_columns]
-    B_columns = [i + '_B' for i in orig_columns]
-    new_df_A = small_df.copy()
-    new_df_B = small_df.copy()
-    new_df_A.columns = A_columns
-    new_df_B.columns = B_columns
+def combine_dfs(df_1, df_2):
+    column_names = df_1.columns
+    A_columns = [i + '_A' for i in column_names]
+    B_columns = [i + '_B' for i in column_names]
+    df_A = df_1.copy()
+    df_B = df_2.copy()
+    df_A.columns = A_columns
+    df_B.columns = B_columns
 
-    overall_df = pd.DataFrame()
-    length = len(small_df.index)
-    for x in range(length):
-        for y in range(length):
-            line = pd.concat([new_df_A.iloc[x], new_df_B.iloc[y]])
-            overall_df = overall_df.append(line, ignore_index=True)
+    combination_df = pd.DataFrame()
+    for x in range(len(df_A.index)):
+        for y in range(len(df_B.index)):
+            line = pd.concat([df_A.iloc[x], df_B.iloc[y]])
+            combination_df = combination_df.append(line, ignore_index=True)
 
-    overall_df['Equivalent'] = overall_df['Name_A'] == overall_df['Name_B']
-    overall_df['Equivalent'] = overall_df['Equivalent'].astype(int)
-    overall_df['CC_rate_r'] = (overall_df[['CC_rate_A', 'CC_rate_B']].min(axis=1) /
-                               overall_df[['CC_rate_A', 'CC_rate_B']].max(axis=1))
+    r_columns = [i + '_r' for i in column_names[1:]]
+    for c_name in zip(r_columns, A_columns[1:], B_columns[1:]):
+        combination_df[c_name[0]] = (combination_df[[c_name[1], c_name[2]]].min(axis=1) /
+                                     combination_df[[c_name[1], c_name[2]]].max(axis=1))
 
-    overall_df['CD_rate_r'] = (overall_df[['CD_rate_A', 'CD_rate_B']].min(axis=1) /
-                               overall_df[['CD_rate_A', 'CD_rate_B']].max(axis=1))
+    combination_df.drop(['CC_rate_A', 'CC_rate_B', 'CD_rate_A',
+                         'CD_rate_B', 'DC_rate_A', 'DC_rate_B', 'DD_rate_A',
+                         'CC_to_C_rate_A', 'CC_to_C_rate_B', 'CD_to_C_rate_A',
+                         'CD_to_C_rate_B', 'DC_to_C_rate_A', 'DC_to_C_rate_B',
+                         'DD_to_C_rate_A', 'DD_to_C_rate_B',
+                         'DD_rate_B', 'Cooperation_rating_A',
+                         'Cooperation_rating_B', 'Initial_C_rate_A',
+                         'Initial_C_rate_B', 'Median_score_A', 'Median_score_B',
+                         'Wins_A', 'Wins_B'], axis=1, inplace=True)
 
-    overall_df['DC_rate_r'] = (overall_df[['DC_rate_A', 'DC_rate_B']].min(axis=1) /
-                               overall_df[['DC_rate_A', 'DC_rate_B']].max(axis=1))
+    combination_df.fillna(1, inplace=True)
 
-    overall_df['DD_rate_r'] = (overall_df[['DD_rate_A', 'DD_rate_B']].min(axis=1) /
-                               overall_df[['DD_rate_A', 'DD_rate_B']].max(axis=1))
-
-
-    overall_df['CC_to_C_r'] = (overall_df[['CC_to_C_rate_A', 'CC_to_C_rate_B']].min(axis=1) /
-                               overall_df[['CC_to_C_rate_A', 'CC_to_C_rate_B']].max(axis=1))
-
-    overall_df['CD_to_C_r'] = (overall_df[['CD_to_C_rate_A', 'CD_to_C_rate_B']].min(axis=1) /
-                               overall_df[['CD_to_C_rate_A', 'CD_to_C_rate_B']].max(axis=1))
-
-    overall_df['DC_to_C_r'] = (overall_df[['DC_to_C_rate_A', 'DC_to_C_rate_B']].min(axis=1) /
-                               overall_df[['DC_to_C_rate_A', 'DC_to_C_rate_B']].max(axis=1))
-
-    overall_df['DD_to_C_r'] = (overall_df[['DD_to_C_rate_A', 'DD_to_C_rate_B']].min(axis=1) /
-                               overall_df[['DD_to_C_rate_A', 'DD_to_C_rate_B']].max(axis=1))
-
-
-
-    overall_df['Cooperation_rating_r'] = (overall_df[['Cooperation_rating_A',
-                                                      'Cooperation_rating_B']].min(axis=1) /
-                                          overall_df[['Cooperation_rating_A',
-                                                      'Cooperation_rating_B']].max(axis=1))
-
-    overall_df['Initial_C_rate_r'] = (overall_df[['Initial_C_rate_A',
-                                                  'Initial_C_rate_B']].min(axis=1) /
-                                      overall_df[['Initial_C_rate_A',
-                                                  'Initial_C_rate_B']].max(axis=1))
-
-    overall_df['Median_score_r'] = (overall_df[['Median_score_A', 'Median_score_B']].min(axis=1) /
-                                    overall_df[['Median_score_A', 'Median_score_B']].max(axis=1))
-
-    overall_df['Wins_r'] = (overall_df[['Wins_A', 'Wins_B']].min(axis=1) /
-                            overall_df[['Wins_A', 'Wins_B']].max(axis=1))
-
-    overall_df.drop(['Name_A', 'Name_B', 'CC_rate_A', 'CC_rate_B', 'CD_rate_A',
-                     'CD_rate_B', 'DC_rate_A', 'DC_rate_B', 'DD_rate_A',
-                     'CC_to_C_rate_A', 'CC_to_C_rate_B', 'CD_to_C_rate_A',
-                     'CD_to_C_rate_B', 'DC_to_C_rate_A', 'DC_to_C_rate_B',
-                     'DD_to_C_rate_A', 'DD_to_C_rate_B',
-                     'DD_rate_B', 'Cooperation_rating_A', 'Cooperation_rating_B',
-                     'Initial_C_rate_A', 'Initial_C_rate_B', 'Median_score_A',
-                     'Median_score_B', 'Wins_A', 'Wins_B'], axis=1, inplace=True)
-
-    overall_df.fillna(1, inplace=True)
-
-    return overall_df
+    return combination_df
