@@ -1,6 +1,6 @@
+from itertools import product
 import numpy as np
 import pandas as pd
-from itertools import product
 from axelrod.strategies.memoryone import MemoryOnePlayer
 from AshlockTournament import build_ashlock_tournament, create_ashlock_tournament_df, combine_dfs
 

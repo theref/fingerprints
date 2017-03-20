@@ -1,15 +1,13 @@
-import numpy as np
 import random
+import itertools
+import numpy as np
 import axelrod as axl
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn import svm
-from sklearn.metrics import confusion_matrix, auc, roc_curve
-import seaborn as sns
-import itertools
-import tqdm
+from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
-# from AshlockTournament import create_test_df, clean_test_df, create_large_df
+import seaborn as sns
 
 
 def create_models_for_sample(sample_df):

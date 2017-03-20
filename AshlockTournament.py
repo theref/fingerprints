@@ -1,9 +1,9 @@
+import tempfile
+from collections import namedtuple
 import axelrod as axl
 from axelrod.strategy_transformers import JossAnnTransformer, DualTransformer
 import pandas as pd
 import numpy as np
-from collections import namedtuple
-import tempfile
 
 
 Point = namedtuple('Point', 'x y')
