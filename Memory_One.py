@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from itertools import product
 from axelrod.strategies.memoryone import MemoryOnePlayer
-from MachineLearning import build_ashlock_tournament, create_ashlock_tournament_df, combine_dfs
+from AshlockTournament import build_ashlock_tournament, create_ashlock_tournament_df, combine_dfs
 
 
 def create_epsilon_vectors(epsilon):

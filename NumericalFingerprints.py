@@ -1,5 +1,5 @@
 import axelrod as axl
-strats = [axl.TitForTat, axl.WinStayLoseShift, axl.AntiTitForTat, axl.Cooperator, axl.Defector]
+strats = [axl.TitForTat, axl.WinStayLoseShift, axl.AntiTitForTat, axl.Cooperator, axl.Defector, axl.Cycler('CD'), axl.GoByMajority(75)]
 for s in strats:
     probe = axl.TitForTat
     af = axl.AshlockFingerprint(s, probe)
