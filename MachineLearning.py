@@ -77,16 +77,14 @@ def compute_sample_scores(sample_size, num, dataframe, strategies):
     strategies - the strategies to sample from
     """
     sample_scores = []
-    for x in range(num):
+    for _ in range(num):
         try:
             sample_score, sample_conf_matrix, models = score_for_size(sample_size, dataframe, strategies)
             sample_scores.append(sample_score)
         except:
             pass
 
-    if len(sample_scores) == 0:
-        return [0]
-    return sample_scores
+    return [0] if not sample_scores else sample_scores
 
 
 def plot_confusion_matrix(cm, classes, title='Confusion matrix', cmap=plt.cm.Blues):

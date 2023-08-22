@@ -28,9 +28,7 @@ def create_points(step):
 
     points = []
     for x in np.linspace(0, 1, num):
-        for y in np.linspace(0, 1, num):
-            points.append(Point(x, y))
-
+        points.extend(Point(x, y) for y in np.linspace(0, 1, num))
     return points
 
 
@@ -57,12 +55,13 @@ def create_jossann(point, probe):
     else:
         init_args = ()
 
-    if x + y >= 1:
-        joss_ann = DualTransformer()(
-            JossAnnTransformer((1 - x, 1 - y))(probe))(*init_args)
-    else:
-        joss_ann = JossAnnTransformer((x, y))(probe)(*init_args)
-    return joss_ann
+    return (
+        DualTransformer()(JossAnnTransformer((1 - x, 1 - y))(probe))(
+            *init_args
+        )
+        if x + y >= 1
+        else JossAnnTransformer((x, y))(probe)(*init_args)
+    )
 
 
 def create_probes(probe, points):
@@ -81,8 +80,7 @@ def create_probes(probe, points):
         A list of `JossAnnTransformer` players with parameters that
         correspond to point.
     """
-    probes = [create_jossann(point, probe) for point in points]
-    return probes
+    return [create_jossann(point, probe) for point in points]
 
 
 def create_edges(strategies, points):
@@ -112,8 +110,7 @@ def build_ashlock_tournament(strategies):
     probes = create_probes(axl.TitForTat, points)
     edges = create_edges(strategies, points)
     tournament_players = strategies + probes
-    spatial_tournament = axl.SpatialTournament(tournament_players, edges=edges)
-    return spatial_tournament
+    return axl.SpatialTournament(tournament_players, edges=edges)
 
 
 def create_ashlock_tournament_df(ashlock_tournament, p=None, p_bar=False):
