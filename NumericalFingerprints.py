@@ -5,4 +5,4 @@ for s in strats:
     af = axl.AshlockFingerprint(s, probe)
     data = af.fingerprint(turns=500, repetitions=200, step=0.01, processes=0)
     p = af.plot()
-    p.savefig('/scratch/c1304586/img/{}-Numerical.pdf'.format(s.name))
+    p.savefig(f'/scratch/c1304586/img/{s.name}-Numerical.pdf')

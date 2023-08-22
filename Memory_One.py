@@ -9,8 +9,7 @@ def create_epsilon_vectors(epsilon):
     """Will return all 16 possible vectors for a given epsilon
     """
     options = [epsilon, -epsilon]
-    epsilon_vectors = product(options, repeat=4)
-    return epsilon_vectors
+    return product(options, repeat=4)
 
 
 def deviate_vector(original, epsilon_vector):
@@ -27,8 +26,7 @@ def create_deviated_vectors(original, epsilon):
     16 m_epsilon vectors.
     """
     epsilon_vectors = create_epsilon_vectors(epsilon)
-    deviated_vectors = (deviate_vector(original, e) for e in epsilon_vectors)
-    return deviated_vectors
+    return (deviate_vector(original, e) for e in epsilon_vectors)
 
 
 def results_df_for_epsilon(vector, epsilon):
@@ -37,8 +35,7 @@ def results_df_for_epsilon(vector, epsilon):
     deviated_vectors = create_deviated_vectors(vector, epsilon)
     strats = [MemoryOnePlayer(v) for v in deviated_vectors]
     ashlock_tourn = build_ashlock_tournament(strats)
-    ash_tourn_df = create_ashlock_tournament_df(ashlock_tourn, None)
-    return ash_tourn_df
+    return create_ashlock_tournament_df(ashlock_tourn, None)
 
 
 def comparison_df_for_vector(vector, epsilons, path=None):
@@ -54,9 +51,8 @@ def comparison_df_for_vector(vector, epsilons, path=None):
 
     if path is None:
         return concat_df
-    else:
-        with open(path, 'a') as f:
-            concat_df.to_csv(f, header=f.tell() == 0, index=False)
+    with open(path, 'a') as f:
+        concat_df.to_csv(f, header=f.tell() == 0, index=False)
 
 
 def create_main_compare_df(vectors, epsilons):
